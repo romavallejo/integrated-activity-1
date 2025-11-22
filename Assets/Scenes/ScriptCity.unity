@@ -172,6 +172,14 @@ MonoBehaviour:
   tree1: {fileID: 919132149155446097, guid: b1fcae06592549547be9538eec21f3f1, type: 3}
   tree2: {fileID: 919132149155446097, guid: f3d40129d9b8afe48a2f9253b9e9af9c, type: 3}
   tree3: {fileID: 919132149155446097, guid: ea0849d65508c3c4f98e751ec70c7fa3, type: 3}
+  buildingA: {fileID: 919132149155446097, guid: 7793c2f81491c4e8ebbf5720aa6ae29a, type: 3}
+  buildingB: {fileID: 919132149155446097, guid: 3102e77ca19314024858d3b06eba6729, type: 3}
+  buildingC: {fileID: 919132149155446097, guid: 1673bc60a05134139a93192a793949a8, type: 3}
+  buildingD: {fileID: 919132149155446097, guid: 1da2a1ef8198647e0b4101b2f916a354, type: 3}
+  buildingE: {fileID: 919132149155446097, guid: bbabd950358b7408bad2d37ec16afb56, type: 3}
+  buildingF: {fileID: 919132149155446097, guid: 9c6ea36b5d5a94f6f8204ecde30dd9ea, type: 3}
+  buildingG: {fileID: 919132149155446097, guid: e89118490c58647c49a44529f87c11b5, type: 3}
+  buildingH: {fileID: 919132149155446097, guid: 2199a479ef9fa46919d3b22cfd94b088, type: 3}
 --- !u!1 &1313146542
 GameObject:
   m_ObjectHideFlags: 0
