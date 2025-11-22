@@ -18,6 +18,9 @@ public class CItyCreation : MonoBehaviour
     1: 90
     2: 180
     3: 270
+
+    F: filler of random tree
+    B: building
     */
     List<String> cityInformation = new List<String>()
     {
@@ -56,6 +59,16 @@ public class CItyCreation : MonoBehaviour
     public GameObject tree1;
     public GameObject tree2;
     public GameObject tree3;
+
+    public GameObject buildingA;
+    public GameObject buildingB;
+    public GameObject buildingC;
+    public GameObject buildingD;
+    public GameObject buildingE;
+    public GameObject buildingF;
+    public GameObject buildingG;
+    public GameObject buildingH;
+
 
     void createCityBase()
     {
@@ -188,6 +201,31 @@ public class CItyCreation : MonoBehaviour
                 GameObject[] trees = new GameObject[] {tree1,tree2,tree3};
                 GameObject tree = Instantiate(trees[randomInt], cityPositions[i], Quaternion.identity);
                 tree.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+            }
+            else if (cityInformation[i].Contains("S"))
+            {
+                //stop sign logic might go here
+            }
+            else if (cityInformation[i].Contains("B"))
+            {
+                int randomInt = UnityEngine.Random.Range(0, 8);
+                GameObject[] buldings = new GameObject[] {buildingA,buildingB,buildingC,buildingD,buildingE,buildingF,buildingG,buildingH};
+                GameObject bulding = Instantiate(buldings[randomInt], cityPositions[i], Quaternion.identity);
+                bulding.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                switch (int.Parse(cityInformation[i][1].ToString()))
+                {
+                    case 1:
+                        bulding.transform.localRotation = Quaternion.Euler(0, 90, 0);
+                        break;
+                    case 2:
+                        bulding.transform.localRotation = Quaternion.Euler(0, 180, 0);
+                        break;
+                    case 3:
+                        bulding.transform.localRotation = Quaternion.Euler(0, 270, 0);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
     }
