@@ -22,7 +22,7 @@ public class CItyCreation : MonoBehaviour
     List<String> cityInformation = new List<String>()
     {
         "L1",">",">","T2","T2",">",">","T2",">","T2",">",">",">",">",">","S","T2","T2",">","T2",">","T2",">","T2","L2",
-        "^","E","E","^","v","E","E","^","E","P","E","E","E","E","E","E","S","S","E","P","E","P","E","v","v",
+        "^","F","F","^","v","E","E","^","E","P","E","E","E","E","E","E","S","S","E","P","F","P","E","v","v",
         "T1","P","E","^","v","E","E","^","E","E","E","E","E","E","E","E","^","^","E","E","E","E","E","v","v",
         "^","E","E","^","v","E","E","^","E","E","E","E","L1","T2","<","<","X","X","S","<","<","<","<","T3","v",
         "^","E","E","^","v","E","E","^","E","E","E","P","T3","v","E","E","S","S","E","E","E","E","E","v","v",
@@ -30,9 +30,9 @@ public class CItyCreation : MonoBehaviour
         "^","E","E","^","v","E","E","^","E","E","E","E","v","T1","P","E","^","T1","P","E","E","E","E","v","v",
         "T1","<","<","T3","v","E","E","T1","T2",">","T2",">","T3","v","E","E","^","^","E","E","E","E","E","v","v",
         "^","E","E","^","v","E","E","^","^","E","P","E","v","v","E","E","^","T1","<","<","<","<","<","T3","v",
-        "^","E","E","^","T1","P","E","^","^","E","E","E","v","T1","P","E","^","L0","<","T2","<","<","<","T3","v",
+        "^","E","E","^","T1","P","F","^","^","E","E","E","v","T1","P","E","^","L0","<","T2","<","<","<","T3","v",
         "T1",">",">","X","S",">",">","T0","T1","E","E","E","v","T1","T3","E","^","E","E","P","E","E","E","v","v",
-        "T1","T2","T2","S",">","T3","T3",">","T1","E","P","E","S","S","^","E","^","E","E","E","E","E","E","S","S",
+        "T1","T2","T2","S",">","T3","T3",">","T1","E","P","E","S","S","^","F","^","E","E","E","E","E","E","S","S",
         "^","^","^","R","R","S","S",">",">",">",">","S",">",">",">",">",">",">",">",">",">",">",">","T3","v",
         "^","^","^","R","R","v","v","S","<","<","<","<","<","<","<","<","<","<","T2","<","<","<","<","T3","v",
         "T1","T0","T0","T2","T2","X","X","S","<","<","<","<","L2","E","E","E","E","E","P","E","E","E","E","v","v",
@@ -44,7 +44,7 @@ public class CItyCreation : MonoBehaviour
         "^","E","E","^","^","v","v","E","E","E","E","E","^","E","E","E","E","E","E","E","P","E","E","v","v",
         "^","E","E","^","T1","T0","T0",">",">",">",">",">","T0",">",">",">",">",">",">",">","T0",">",">","T3","v",
         "^","E","E","^","T1",">",">",">",">",">",">",">",">",">",">",">",">",">",">",">",">",">",">","T3","v",
-        "^","E","E","^","^","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","E","v","v",
+        "^","F","F","^","^","F","E","F","E","F","E","F","E","F","E","F","E","F","E","F","E","F","E","v","v",
         "L0","<","<","T0","T0","<","<","<","<","<","<","<","<","<","<","<","<","<","<","<","<","<","<","T0","L3",
     };
     public GameObject straightStreet;
@@ -52,6 +52,10 @@ public class CItyCreation : MonoBehaviour
     public GameObject T;
     public GameObject X;
     public GameObject parking;
+
+    public GameObject tree1;
+    public GameObject tree2;
+    public GameObject tree3;
 
     void createCityBase()
     {
@@ -177,6 +181,13 @@ public class CItyCreation : MonoBehaviour
             {
                 GameObject park = Instantiate(parking,cityPositions[i], Quaternion.identity);
                 park.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+            }
+            else if (cityInformation[i] == "F")
+            {
+                int randomInt = UnityEngine.Random.Range(0, 3);
+                GameObject[] trees = new GameObject[] {tree1,tree2,tree3};
+                GameObject tree = Instantiate(trees[randomInt], cityPositions[i], Quaternion.identity);
+                tree.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
             }
         }
     }
