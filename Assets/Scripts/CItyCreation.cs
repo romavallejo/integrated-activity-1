@@ -14,6 +14,7 @@ public class CItyCreation : MonoBehaviour
     T: untiont to street up
     L: corner
     I: illumination
+    C: Crossing
     
     0: 0
     1: 90
@@ -28,33 +29,34 @@ public class CItyCreation : MonoBehaviour
     */
     List<String> cityInformation = new List<String>()
     {
-        "L1",">",">","T2","T2",">",">","T2",">","T2",">",">",">",">",">","S>","T2","T2",">","T2",">","T2",">","T2","L2",
-        "^","F","F","^","v","B3","B3","^","F","P","B3","B3","B3","B3","B3","F","S^","S^","B3","P","F","P","B3","v","v",
-        "T1","P","B0","^","v","B2","B0","^","B2","E","F","K","B1","B1","B1","F","^","^","B1","B1","B1","B1","B1","v","v",
-        "^","B2","B0","^","vI","B2","B0","^","B2","Y","E","B0","L1","T2","<","<","X","X","S<","<","<","<","<","T3","v",
-        "^","B2","B0","^","v","B2","B0","^I","B2","E","E","P","T3","vI","B3","B3","S^","S^","B3","B3","B3","B3","B3","v","v",
-        "T1","P","B0","^","v","B2","B0","^","B2","F","K","B0","v","v","B2","B0","^","^","B2","Y","E","F","B0","v","v",
-        "^","F","F","^","v","B2","B0","^","F","B1","B1","F","v","T1","P","B0","^","T1","P","E","E","K","B0","v","v",
-        "T1","<","<","T3","v","B2","B0","T1","T2",">","T2",">","T3","v","B2","B0","^","^","F","B1","B1","B1","B1","v","v",
-        "^","F","F","^","v","B2","B0","^","^","B2","P","B0","v","v","B2","B0","^","T1","<","<","<","<","<","T3","vI",
-        "^I","F","K","^","T1","P","F","^","^","B2","E","B0","v","T1","P","B0","^","L0","<","T2","<","<","<","T3","v",
-        "T1",">",">","T3","ST13",">",">","T0","T1","B2","E","B0","v","T1","T3","K","^","F","B3","P","B3","B3","B0","v","v",
-        "T1","T2","T2","ST02","T0","T2","T2",">","T1","B2","P","B0","Sv","Sv","^","F","^","K","B1","B1","B1","B1","B0","Sv","Sv",
-        "^","^","^","Y","R","ST13","ST13",">",">",">I",">","S>",">",">","T0",">",">",">",">",">I",">",">","S>","T3","v",
-        "^","^","^","R","R","v","v","S<","<","<","<","<","<","<","<","<","<","<","T2","<","<","<","<","T3","v",
-        "T1","T0","T0","T2","T2","X","X","S<","<","<","<","<","L2","F","B3","B3","B3","B3","P","B3","B3","B3","F","v","v",
-        "^","F","F","S^","S^","v","v","F","B3","B3","B3","F","^","F","B1","B1","P","B1","B1","B1","B1","B1","F","v","v",
-        "^","B2","B0","^","^","v","vI","B2","E","E","K","P","X","<","<","<","T0","<","<I","T2","<","<","<","T3","v",
-        "^","B2","B0","^","^","v","v","B2","F","E","E","B0","^","F","B3","B3","P","B3","B3","P","B3","B3","F","v","v",
-        "^","B2","B0","^","^","v","T1","P","E","K","E","B0","^","B2","E","F","E","K","E","E","E","E","B0","v","v",
+        "L1","C>",">","T2","T2","C>",">","T2",">","T2","C>",">",">",">",">","SC>","T2","T2",">","T2",">","T2","C>","T2","L2",
+        "^","F","F","C^","Cv","B3","B3","C^","F","P2","B3","B3","B3","B3","B3","F","SC^","SC^","B3","P2","F","P2","B3","Cv","Cv",
+        "T1","P1","B0","^","v","B2","B0","^","B2","E","F","K","B1","B1","B1","F","^","^","B1","B1","B1","B1","B1","v","v",
+        "^","B2","B0","^","vI","B2","B0","^","B2","Y","E","B0","L1","T2","<","C<","X","X","SC<","<","<","<","C<","T3","v",
+        "^","B2","B0","^","v","B2","B0","^I","B2","E","E","P1","T3","vI","B3","B3","SC^","SC^","B3","B3","B3","B3","B3","v","v",
+        "T1","P1","B0","^","v","B2","B0","^","B2","F","K","B0","v","v","B2","B0","^","^","B2","Y","E","F","B0","v","v",
+        "^","F","F","C^","Cv","B2","B0","^","F","B1","B1","F","v","T1","P1","B0","^","T1","P1","E","E","K","B0","v","v",
+        "T1","<","<","T3","v","B2","B0","T1","T2",">","T2","C>","T3","v","B2","B0","^","^","F","B1","B1","B1","B1","v","v",
+        "^","F","F","^","v","B2","B0","^","^","B2","P2","B0","v","v","B2","B0","^","T1","<","<","<","<","C<","T3","vI",
+        "C^I","F","K","^","T1","P0","F","^","^","B2","F","B0","v","T1","P1","B0","^","L0","<","T2","<","<","C<","T3","v",
+        "T1",">",">","T3","ST13",">",">","T0","T3","B2","K","B0","v","T1","T3","K","^","F","B3","P0","B3","B3","B0","v","v",
+        "T1","T2","T2","ST02","T0","T2","T2",">","T3","B2","P0","B0","SCv","SCv","^","F","^","K","B1","B1","B1","B1","B0","SCv","SCv",
+        "^","^","^","Y","R","Sv","ST13",">","T0",">I",">","S>",">",">","T0",">",">",">",">",">I",">",">","SC>","T3","v",
+        "^","^","^","R","R","v","v","S<","<","<","<","<","<","<","<","<","<","<","T2","<","<","<","C<","T3","v",
+        "T1","T0","T0","T2","T2","X","X","S<","<","<","<","<","L2","F","B3","B3","B3","B3","P0","B3","B3","B3","F","v","v",
+        "C^","F","F","SC^","SC^","Cv","Cv","F","B3","B3","B3","F","C^","F","B1","B1","P2","B1","B1","B1","B1","B1","F","v","v",
+        "^","B2","B0","^","^","v","vI","B2","E","E","K","P1","X","<","<","<","T0","<","<I","T2","<","<","C<","T3","v",
+        "^","B2","B0","^","^","v","v","B2","F","E","E","B0","^","F","B3","B3","P2","B3","B3","P2","B3","B3","F","v","v",
+        "^","B2","B0","^","^","v","T1","P1","E","K","E","B0","^","B2","E","F","E","K","E","E","E","E","B0","v","v",
         "^I","F","K","^","^","v","v","B2","F","E","F","B0","^","B2","E","E","E","E","F","E","F","E","B0","v","v",
-        "^","B2","B0","^","^","v","v","F","B1","B1","B1","F","^","F","B1","B1","B1","B1","B1","B1","P","B1","F","v","v",
-        "^","B2","B0","^","T1","T0","T0",">I",">",">",">",">","T0",">I",">",">",">",">",">",">","T0",">",">I","T3","v",
-        "^","B2","B0","^","T1",">",">",">",">",">",">",">",">",">",">",">",">",">",">",">",">",">",">","T3","v",
-        "^","K","F","^","^","F","K","F","E","F","K","F","E","F","E","F","E","F","K","F","E","F","K","v","v",
-        "L0","<","<","T0","T0","<I","<","<","<","<","<","<","<","<","<I","<","<","<","<","<","<","<","<I","T0","L3",
+        "^","B2","B0","C^","C^","Cv","Cv","F","B1","B1","B1","F","C^","F","B1","B1","B1","B1","B1","B1","P0","B1","F","Cv","Cv",
+        "^","B2","B0","^","T1","T0","T0","C>I",">",">",">",">","T0",">I",">",">",">",">",">",">","T0",">","C>I","T3","v",
+        "^","B2","B0","^","T1",">",">","C>",">",">",">",">","C>",">",">",">",">",">",">",">",">",">",">","T3","v",
+        "C^","K","F","^","^","F","K","F","E","F","K","F","E","F","E","F","E","F","K","F","E","F","K","v","v",
+        "L0","C<","<","T0","T0","<I","<","C<","<","<","<","<","C<","<","<I","<","<","<","<","<","<","<","C<I","T0","L3",
     };
     public GameObject straightStreet;
+    public GameObject crossing;
     public GameObject L;
     public GameObject T;
     public GameObject X;
@@ -141,8 +143,14 @@ public class CItyCreation : MonoBehaviour
         {
             if (cityInformation[i].Contains("<") || cityInformation[i].Contains(">"))
             {
-                GameObject horistonalStreet = Instantiate(straightStreet, cityPositions[i], Quaternion.identity);
+                GameObject horistonalStreet;
+                if (cityInformation[i].Contains("C"))
+                    horistonalStreet = Instantiate(crossing, cityPositions[i], Quaternion.identity);
+                else
+                    horistonalStreet = Instantiate(straightStreet, cityPositions[i], Quaternion.identity);
                 horistonalStreet.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                if (cityInformation[i].Contains("<"))
+                    horistonalStreet.transform.localRotation = Quaternion.Euler(0, 180, 0);
                 if (cityInformation[i].Contains("I"))
                 {
                     GameObject light = Instantiate(lightPost,cityPositions[i],Quaternion.identity);
@@ -158,10 +166,16 @@ public class CItyCreation : MonoBehaviour
             }
             else if (cityInformation[i].Contains("^") || cityInformation[i].Contains("v"))
             {
-                GameObject verticalStreet = Instantiate(straightStreet,cityPositions[i], Quaternion.identity);
+                GameObject verticalStreet;
+                if (cityInformation[i].Contains("C"))
+                    verticalStreet = Instantiate(crossing,cityPositions[i], Quaternion.identity);
+                else
+                    verticalStreet = Instantiate(straightStreet,cityPositions[i], Quaternion.identity);
                 verticalStreet.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
-                verticalStreet.transform.localRotation = Quaternion.Euler(0, 90, 0);
-
+                if (cityInformation[i].Contains("^"))
+                    verticalStreet.transform.localRotation = Quaternion.Euler(0, -90, 0);
+                else
+                    verticalStreet.transform.localRotation = Quaternion.Euler(0, 90, 0);
                 if (cityInformation[i].Contains("I"))
                 {
                     GameObject light = Instantiate(lightPost,cityPositions[i],Quaternion.identity);
@@ -205,10 +219,11 @@ public class CItyCreation : MonoBehaviour
                 GameObject xStreet = Instantiate(X,cityPositions[i], Quaternion.identity);
                 xStreet.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
             }
-            else if (cityInformation[i] == "P")
+            else if (cityInformation[i].Contains("P"))
             {
                 GameObject park = Instantiate(parking,cityPositions[i], Quaternion.identity);
                 park.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                park.transform.localRotation = Quaternion.Euler(0,int.Parse(cityInformation[i][1].ToString())*90, 0);
             }
             else if (cityInformation[i] == "F")
             {

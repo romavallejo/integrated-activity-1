@@ -164,11 +164,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CItyCreation
   graassMaterial: {fileID: 2100000, guid: 148d0965fe2bd684aad1c5ea76e4caf3, type: 2}
-  straightStreet: {fileID: 919132149155446097, guid: c1f1e4d11a6f34066aaf0601753fb242, type: 3}
+  straightStreet: {fileID: 6313050211412756526, guid: 03a8a433f28510a409471529f3bc5433, type: 3}
+  crossing: {fileID: 919132149155446097, guid: d70fd300eb22a49f5995364baa74d1e5, type: 3}
   L: {fileID: 919132149155446097, guid: 866697b1b6c57460f8a1354791f07c3e, type: 3}
   T: {fileID: 919132149155446097, guid: 1b56fe42e6e1a4c5eaf29d78e46ec4c8, type: 3}
   X: {fileID: 919132149155446097, guid: f2ed7e48b5ac747b7b178de6b548e358, type: 3}
-  parking: {fileID: 919132149155446097, guid: 127dfdd4d49f34d3fa3f8bb738fbc633, type: 3}
+  parking: {fileID: 7283868487795017378, guid: 3879a2c722764164a9cbf8dc7857a203, type: 3}
   tree1: {fileID: 919132149155446097, guid: b1fcae06592549547be9538eec21f3f1, type: 3}
   tree2: {fileID: 919132149155446097, guid: f3d40129d9b8afe48a2f9253b9e9af9c, type: 3}
   tree3: {fileID: 919132149155446097, guid: ea0849d65508c3c4f98e751ec70c7fa3, type: 3}
