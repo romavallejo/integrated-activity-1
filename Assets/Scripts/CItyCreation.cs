@@ -80,7 +80,6 @@ public class CItyCreation : MonoBehaviour
     public GameObject fountain;
 
     public GameObject stopLightSingle;
-    public GameObject stopLightDoble;
 
     void createCityBase()
     {
