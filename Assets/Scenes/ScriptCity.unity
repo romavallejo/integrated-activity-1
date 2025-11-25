@@ -170,9 +170,9 @@ MonoBehaviour:
   T: {fileID: 919132149155446097, guid: 1b56fe42e6e1a4c5eaf29d78e46ec4c8, type: 3}
   X: {fileID: 919132149155446097, guid: f2ed7e48b5ac747b7b178de6b548e358, type: 3}
   parking: {fileID: 7283868487795017378, guid: 3879a2c722764164a9cbf8dc7857a203, type: 3}
-  tree1: {fileID: 919132149155446097, guid: b1fcae06592549547be9538eec21f3f1, type: 3}
-  tree2: {fileID: 919132149155446097, guid: f3d40129d9b8afe48a2f9253b9e9af9c, type: 3}
-  tree3: {fileID: 919132149155446097, guid: ea0849d65508c3c4f98e751ec70c7fa3, type: 3}
+  tree1: {fileID: 919132149155446097, guid: da74a3e49d1faf64b9ed3869f9634834, type: 3}
+  tree2: {fileID: 919132149155446097, guid: 87786ee75ac22f54d9d55d27709bf88d, type: 3}
+  tree3: {fileID: 919132149155446097, guid: e8442311fee4f344598cfbf8b0d23bd5, type: 3}
   buildingA: {fileID: 919132149155446097, guid: d6bc2467d3f23472790926118595087a, type: 3}
   buildingB: {fileID: 919132149155446097, guid: b93474e70bc3a417f86c9b242436cbd2, type: 3}
   buildingC: {fileID: 919132149155446097, guid: b4dade183295641c09c4cbedb773409c, type: 3}
