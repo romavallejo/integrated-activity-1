@@ -184,7 +184,6 @@ MonoBehaviour:
   bench: {fileID: 8045579974334571706, guid: 8660ba216a78f094199cd91c16c27807, type: 3}
   lightPost: {fileID: 8690592395768990615, guid: 55f694332d9c0794b9846b84625cd675, type: 3}
   fountain: {fileID: 6120303410340076247, guid: 4038cb0c417dc57469db144f74b12c7f, type: 3}
-  pedestrianSign: {fileID: 4306801723135590154, guid: e1ee1ec6566e5da4eb0a5792c33928a9, type: 3}
   stopLightSingle: {fileID: 2842863860463396438, guid: dfd9150eadc8aaf4aa7147eb4f4f43a2, type: 3}
 --- !u!1 &1313146542
 GameObject:
