@@ -78,7 +78,7 @@ public class CItyCreation : MonoBehaviour
     public GameObject bench;
     public GameObject lightPost;
     public GameObject fountain;
-
+    
     public GameObject stopLightSingle;
 
     void createCityBase()
