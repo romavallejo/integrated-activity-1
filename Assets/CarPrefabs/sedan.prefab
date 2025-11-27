@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 8134168996446197395}
   - component: {fileID: 6097990394331540094}
   m_Layer: 0
-  m_Name: mazda
+  m_Name: sedan
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
