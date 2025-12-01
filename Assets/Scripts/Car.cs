@@ -49,7 +49,7 @@ public class Car : MonoBehaviour
         mem = tra * rot;
         //mem = tra;
        
-        outOfParking = false;
+        outOfParking = true;
 
         MeshFilter mf = carInstance.GetComponent<MeshFilter>();
         originals = new List<Vector3>(mf.mesh.vertices);
@@ -126,8 +126,7 @@ public class Car : MonoBehaviour
                 takingCorner = false;
                 rotationProgress = 0;
                 targets.RemoveAt(0);
-                //targets.RemoveAt(0);
-                currTarget = targets[0]; // dont understand why i needed this but is needed
+                //currTarget = targets[0]; // dont understand why i needed this but is needed
             }
         }   
         
@@ -166,6 +165,7 @@ public class Car : MonoBehaviour
         
         else if (waiting)
         {
+            Debug.Log("waiting");
             waitingTimer++;
             if (waitingTimer == 100)
             {
