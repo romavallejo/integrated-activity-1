@@ -18,7 +18,7 @@ public class Car : MonoBehaviour
     public Vector3 currPos;
 
     //to help with the smooth rotation and curve int he corern
-    public bool takingCorner, preparingForCorner;
+    public bool takingCorner, preparingForCorner, outOfParking;
     public int rotationProgress;
     public float rotationProgressStep;
     public Vector3 pivotPosition;
@@ -35,22 +35,30 @@ public class Car : MonoBehaviour
         waiting = false;
         takingCorner = false;
         preparingForCorner = false;
+        outOfParking = false;
 
         tra = MathFunctions.TranslateM(initPos);
-
         carInstance = Instantiate(prefab);
+
+        Vector3 desiredDir = MathFunctions.Normalize(initTargets[0] - initPos);
+        Vector3 defaultDir = new Vector3(1, 0, 0);
+        float angle = MathFunctions.AngleBetween(defaultDir, desiredDir);
+        float sign = MathFunctions.CrossProduct(defaultDir, desiredDir).y >= 0 ? 1f : -1f;
+        rot = MathFunctions.RotateY(angle * sign);
+        
+        mem = tra * rot;
+        //mem = tra;
+       
+        outOfParking = true;
 
         MeshFilter mf = carInstance.GetComponent<MeshFilter>();
         originals = new List<Vector3>(mf.mesh.vertices);
 
-        mem = tra;
-
         List<Vector3> transformed = MathFunctions.ApplyTransform(mem, originals);
-
         mf.mesh.vertices = transformed.ToArray();
         mf.mesh.RecalculateNormals();
-
         targets = initTargets;
+        targets.Insert(0,initPos);
     }
 
     public void addTarget(Vector3 target)
@@ -94,7 +102,6 @@ public class Car : MonoBehaviour
     public void Update()
     {
         currPos = new Vector3(mem[0,3], mem[1,3], mem[2,3]);
-        //Debug.Log("Current Position: " + currPos);
 
         if (preparingForCorner)
         {
