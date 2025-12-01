@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using NUnit.Framework;
 using Unity.Mathematics;
 using UnityEngine;
 
@@ -14,22 +15,27 @@ public class Car : MonoBehaviour
     //to see current positio nto reach
     public List<Vector3> targets;
     public Vector3 currTarget;
+    public Vector3 currPos;
 
     //to help with the smooth rotation and curve int he corern
-    public bool takingCorner;
+    public bool takingCorner, preparingForCorner, exitingCorner;
     public int rotationProgress;
-    public int rotationDirection;
+    public int rotationProgressStep;
     public Vector3 pivotPosition;
 
     //to indicate teh car is moving forward
-    public bool movingForward;
-    public bool waiting;
+    public bool movingForward,  waiting;
     public int waitingTimer;
 
     public void Initialize(Vector3 initPos, GameObject prefab, List<Vector3> initTargets)
     { 
         waitingTimer = 0;
         rotationProgress = 0;
+        movingForward = false;
+        waiting = false;
+        takingCorner = false;
+        preparingForCorner = false;
+        exitingCorner = false;
 
         tra = MathFunctions.TranslateM(initPos);
 
@@ -59,43 +65,79 @@ public class Car : MonoBehaviour
         Vector3 dir2 = MathFunctions.Normalize(points[2] - points[1]);
         return MathFunctions.DotProduct(dir1, dir2) < 0.99f;
     }
+
+    public void calcPivot()
+    {
+        Vector3 A = targets[0];
+        Vector3 B = targets[1];
+        Vector3 C = targets[2];
+
+        float pivotX = (A.x + C.x) * 0.5f;
+        float pivotZ = (A.z + C.z) * 0.5f;
+
+        pivotPosition = new Vector3(pivotX, B.y, pivotZ);
+    }
+
     public void takeCorner()
     {
-        Matrix4x4 toPivot = MathFunctions.TranslateM(-pivotPosition);
-        Matrix4x4 rot = MathFunctions.RotateY(rotationDirection);
-        Matrix4x4 back = MathFunctions.TranslateM(pivotPosition);
-        mem = back * rot * toPivot * mem;
+    Matrix4x4 notP = MathFunctions.TranslateM(-pivotPosition);
+    Matrix4x4 rotM = MathFunctions.RotateY(rotationProgressStep); 
+    Matrix4x4 yesP = MathFunctions.TranslateM(pivotPosition);
+    mem = yesP * rotM * notP * mem;
     }
 
     public void moveForward()
     {
         Matrix4x4 forward = MathFunctions.TranslateM(new Vector3(0.01f,0,0));
-        mem = forward * mem;
+        mem = mem * forward;
     }
 
     public void Update()
     {
-        Vector3 currPos = new Vector3(mem[0,3], mem[1,3], mem[2,3]);
-        Debug.Log("Current Position: " + currPos);
+        currPos = new Vector3(mem[0,3], mem[1,3], mem[2,3]);
+        //Debug.Log("Current Position: " + currPos);
 
-        if (takingCorner)
+        if (preparingForCorner)
         {
-            Debug.Log("takingCorner");
+            rotationProgress++;
+            moveForward();
+            if (rotationProgress == 150)
+            {
+                rotationProgress = 0;
+                preparingForCorner = false;
+                takingCorner = true;
+            }
+        }
+
+        /*
+        else if (exitingCorner)
+        {
+            rotationProgress++;
+            moveForward();
+            if (rotationProgress == 50)
+            {
+                rotationProgress = 0;
+                exitingCorner = false;
+            }
+        }
+        */
+
+        else if (takingCorner)
+        {
             takeCorner();
             rotationProgress++;
             if (rotationProgress == 90)
             {
                 takingCorner = false;
+                rotationProgress = 0;
                 targets.RemoveAt(0);
                 targets.RemoveAt(0);
+                currTarget = targets[0]; // dont understand why i needed this but is needed
             }
         }   
-
+        
         else if (movingForward)
         {
-            Debug.Log("moving forward");
-            Debug.Log("curr target: "+currTarget);
-            Debug.Log(Vector3.Distance(currPos, currTarget) <= 0.02f);
             if (Vector3.Distance(currPos, currTarget) <= 0.02f)
             {
                 movingForward = false;
@@ -106,7 +148,6 @@ public class Car : MonoBehaviour
         
         else if (waiting)
         {
-            Debug.Log("waiting");
             waitingTimer++;
             if (waitingTimer == 100)
             {
@@ -118,12 +159,27 @@ public class Car : MonoBehaviour
         
         else if (targets.Count > 0)
         {
-            currTarget = targets[0];
+            currTarget = targets[0];    
+            Debug.Log("next target: "+currTarget);
 
             if (targets.Count > 2)
-            {
-                
-            }
+                if (rotationNedded(targets))
+                {
+                    Vector3 currentForward = new Vector3(mem[0, 0], mem[1, 0], mem[2, 0]);
+                    Vector3 toTarget = MathFunctions.Normalize(targets[1] - currPos);
+
+                    Vector3 A = targets[0];
+                    Vector3 B = targets[1];
+                    Vector3 C = targets[2];
+
+                    Vector3 dirIn  = MathFunctions.Normalize(B - A);
+                    Vector3 dirOut = MathFunctions.Normalize(C - B);
+
+                    float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
+                    rotationProgressStep = (cross > 0) ? -1 : 1;
+                    calcPivot();                    
+                    preparingForCorner = true;
+                }
 
             if (Vector3.Distance(currPos, currTarget) <= 0.02f)
                 waiting = true;
