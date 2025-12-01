@@ -18,9 +18,9 @@ public class Car : MonoBehaviour
     public Vector3 currPos;
 
     //to help with the smooth rotation and curve int he corern
-    public bool takingCorner, preparingForCorner, exitingCorner;
+    public bool takingCorner, preparingForCorner;
     public int rotationProgress;
-    public int rotationProgressStep;
+    public float rotationProgressStep;
     public Vector3 pivotPosition;
 
     //to indicate teh car is moving forward
@@ -35,7 +35,6 @@ public class Car : MonoBehaviour
         waiting = false;
         takingCorner = false;
         preparingForCorner = false;
-        exitingCorner = false;
 
         tra = MathFunctions.TranslateM(initPos);
 
@@ -86,9 +85,9 @@ public class Car : MonoBehaviour
     mem = yesP * rotM * notP * mem;
     }
 
-    public void moveForward()
+    public void moveForward(float speed)
     {
-        Matrix4x4 forward = MathFunctions.TranslateM(new Vector3(0.01f,0,0));
+        Matrix4x4 forward = MathFunctions.TranslateM(new Vector3(speed,0,0));
         mem = mem * forward;
     }
 
@@ -100,7 +99,7 @@ public class Car : MonoBehaviour
         if (preparingForCorner)
         {
             rotationProgress++;
-            moveForward();
+            moveForward(0.01f);
             if (rotationProgress == 150)
             {
                 rotationProgress = 0;
@@ -109,24 +108,11 @@ public class Car : MonoBehaviour
             }
         }
 
-        /*
-        else if (exitingCorner)
-        {
-            rotationProgress++;
-            moveForward();
-            if (rotationProgress == 50)
-            {
-                rotationProgress = 0;
-                exitingCorner = false;
-            }
-        }
-        */
-
         else if (takingCorner)
         {
             takeCorner();
             rotationProgress++;
-            if (rotationProgress == 90)
+            if (rotationProgress == 100)
             {
                 takingCorner = false;
                 rotationProgress = 0;
@@ -143,7 +129,7 @@ public class Car : MonoBehaviour
                 movingForward = false;
                 targets.RemoveAt(0);
             }
-            moveForward();
+            moveForward(0.01f);
         }
         
         else if (waiting)
@@ -176,7 +162,7 @@ public class Car : MonoBehaviour
                     Vector3 dirOut = MathFunctions.Normalize(C - B);
 
                     float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
-                    rotationProgressStep = (cross > 0) ? -1 : 1;
+                    rotationProgressStep = (cross > 0) ? -0.9f : 0.9f;
                     calcPivot();                    
                     preparingForCorner = true;
                 }
