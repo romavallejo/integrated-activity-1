@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class CarManager : MonoBehaviour
 {
+    public GameObject carScriptLogic;
     //PrebaCars
     public GameObject convertible;
     public GameObject pickuptruck;
@@ -12,14 +13,17 @@ public class CarManager : MonoBehaviour
     List<Car> carInstances;
     void Start()
     {
+        //choose random car
         carPrefabs = new List<GameObject>() {convertible,pickuptruck,cybertruck,sedan};
-        //making the below in for loop
         int randomInt = UnityEngine.Random.Range(0, 3);
-        Car currentCar = new Car();
-
-        int randomInt = UnityEngine.Random.Range(0, 3);
-        Car currentCar = new Car();
-        
+        Car car = Instantiate(carScriptLogic).GetComponent<Car>();
+        car.Initialize(new Vector3(0.5f,0.1f,0.5f),carPrefabs[2], new List<Vector3>()
+        {
+            new Vector3(1.5f,0.1f,0.5f),
+            new Vector3(2.5f,0.1f,0.5f),
+            new Vector3(2.5f,0.1f,0.5f),
+            new Vector3(3.5f,0.1f,0.5f)
+        });
     }
 
     void Update()
