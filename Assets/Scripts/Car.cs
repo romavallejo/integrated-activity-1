@@ -49,7 +49,7 @@ public class Car : MonoBehaviour
         mem = tra * rot;
         //mem = tra;
        
-        outOfParking = true;
+        outOfParking = false;
 
         MeshFilter mf = carInstance.GetComponent<MeshFilter>();
         originals = new List<Vector3>(mf.mesh.vertices);
@@ -66,11 +66,11 @@ public class Car : MonoBehaviour
         targets.Add(target);
     }
 
-    private bool rotationNedded(List<Vector3> points)
+    private bool rotationNeeded(Vector3 A, Vector3 B, Vector3 C)
     {
-        Vector3 dir1 = MathFunctions.Normalize(points[1] - points[0]);
-        Vector3 dir2 = MathFunctions.Normalize(points[2] - points[1]);
-        return MathFunctions.DotProduct(dir1, dir2) < 0.99f;
+        Vector3 dirIn  = MathFunctions.Normalize(B - A);
+        Vector3 dirOut = MathFunctions.Normalize(C - B);
+        return MathFunctions.DotProduct(dirIn, dirOut) < 0.99f;
     }
 
     public void calcPivot()
@@ -107,8 +107,10 @@ public class Car : MonoBehaviour
         {
             rotationProgress++;
             moveForward(0.01f);
-            if (rotationProgress == 150)
+            if (rotationProgress == 50)
             {
+                if (outOfParking)
+                    outOfParking = false;
                 rotationProgress = 0;
                 preparingForCorner = false;
                 takingCorner = true;
@@ -124,7 +126,7 @@ public class Car : MonoBehaviour
                 takingCorner = false;
                 rotationProgress = 0;
                 targets.RemoveAt(0);
-                targets.RemoveAt(0);
+                //targets.RemoveAt(0);
                 currTarget = targets[0]; // dont understand why i needed this but is needed
             }
         }   
@@ -132,9 +134,32 @@ public class Car : MonoBehaviour
         else if (movingForward)
         {
             if (Vector3.Distance(currPos, currTarget) <= 0.02f)
-            {
+            {   
                 movingForward = false;
                 targets.RemoveAt(0);
+                if (targets.Count > 1)
+                    if (rotationNeeded(currPos,targets[0],targets[1]))
+                    {
+                        Vector3 currentForward = new Vector3(mem[0, 0], mem[1, 0], mem[2, 0]);
+                        Vector3 toTarget = MathFunctions.Normalize(targets[1] - currPos);
+
+                        Vector3 A = currPos;
+                        Vector3 B = targets[0];
+                        Vector3 C = targets[1];
+
+                        Vector3 dirIn  = MathFunctions.Normalize(B - A);
+                        Vector3 dirOut = MathFunctions.Normalize(C - B);
+
+                        float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
+                        rotationProgressStep = (cross > 0) ? -0.9f : 0.9f;
+
+                        float pivotX = (A.x + C.x) * 0.5f;
+                        float pivotZ = (A.z + C.z) * 0.5f;
+
+                        pivotPosition = new Vector3(pivotX, B.y, pivotZ);
+
+                        preparingForCorner = true;
+                    }
             }
             moveForward(0.01f);
         }
@@ -155,24 +180,27 @@ public class Car : MonoBehaviour
             currTarget = targets[0];    
             Debug.Log("next target: "+currTarget);
 
-            if (targets.Count > 2)
-                if (rotationNedded(targets))
-                {
-                    Vector3 currentForward = new Vector3(mem[0, 0], mem[1, 0], mem[2, 0]);
-                    Vector3 toTarget = MathFunctions.Normalize(targets[1] - currPos);
+            if (outOfParking)
+            {
+                Vector3 currentForward = new Vector3(mem[0, 0], mem[1, 0], mem[2, 0]);
+                Vector3 toTarget = MathFunctions.Normalize(targets[1] - currPos);
 
-                    Vector3 A = targets[0];
-                    Vector3 B = targets[1];
-                    Vector3 C = targets[2];
+                Vector3 A = targets[0];
+                Vector3 B = targets[1];
+                Vector3 C = targets[2];
 
-                    Vector3 dirIn  = MathFunctions.Normalize(B - A);
-                    Vector3 dirOut = MathFunctions.Normalize(C - B);
+                Vector3 dirIn  = MathFunctions.Normalize(B - A);
+                Vector3 dirOut = MathFunctions.Normalize(C - B);
 
-                    float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
-                    rotationProgressStep = (cross > 0) ? -0.9f : 0.9f;
-                    calcPivot();                    
-                    preparingForCorner = true;
-                }
+                float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
+                rotationProgressStep = (cross > 0) ? -0.9f : 0.9f;
+
+                float pivotX = (A.x + C.x) * 0.5f;
+                float pivotZ = (A.z + C.z) * 0.5f;  
+                pivotPosition = new Vector3(pivotX, B.y, pivotZ);  
+
+                preparingForCorner = true;
+            }
 
             if (Vector3.Distance(currPos, currTarget) <= 0.02f)
                 waiting = true;
