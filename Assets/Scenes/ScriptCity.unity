@@ -352,10 +352,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CarManager
   carScriptLogic: {fileID: 8703703078443097810, guid: bcca8eee5a6183940b06e2d5b7426ea6, type: 3}
-  convertible: {fileID: 8271270709595224482, guid: 586ec7550245743b281b959c71dfa394, type: 3}
+  convertible: {fileID: 7001872869813913632, guid: 586ec7550245743b281b959c71dfa394, type: 3}
   pickuptruck: {fileID: 4931804246984232309, guid: 986062207f599481089a697dd0863128, type: 3}
   cybertruck: {fileID: 8791932752115930794, guid: 9b5f4638b6a524c1b95c2a2f473ae4d4, type: 3}
-  sedan: {fileID: 7182990766688339526, guid: 7ab1c8f6e18f7f34186e760c6f321c1f, type: 3}
+  sedan: {fileID: 3613124839155789382, guid: 7ab1c8f6e18f7f34186e760c6f321c1f, type: 3}
 --- !u!4 &2086140976
 Transform:
   m_ObjectHideFlags: 0
