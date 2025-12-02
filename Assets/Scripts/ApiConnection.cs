@@ -11,6 +11,8 @@ public class Conecction : MonoBehaviour
 
 {
 
+    public GameObject carlogic;
+    private bool requestingPoints = false;
 
     List<List<Vector3>> carPaths = new List<List<Vector3>>();
 
@@ -63,6 +65,8 @@ public class Conecction : MonoBehaviour
         using (UnityWebRequest request = UnityWebRequest.Get("http://127.0.0.1:5000/api/step"))
         {
             yield return request.SendWebRequest();
+            requestingPoints = false;
+
 
             if (request.result == UnityWebRequest.Result.ConnectionError ||
                 request.result == UnityWebRequest.Result.ProtocolError)
@@ -74,12 +78,13 @@ public class Conecction : MonoBehaviour
 
                 string jsonResult = request.downloadHandler.text;
 
-                processResult(jsonResult);
+                addPoint(jsonResult);
 
             }
 
         }
     }
+
     IEnumerator initCars()
     {
         using (UnityWebRequest request = UnityWebRequest.Get("http://127.0.0.1:5000/api/cars"))
@@ -103,6 +108,7 @@ public class Conecction : MonoBehaviour
         }
 
     }
+
     void initCars(string json)
     {
         InitializeCar data = JsonUtility.FromJson<InitializeCar>(json);
@@ -110,37 +116,29 @@ public class Conecction : MonoBehaviour
         int i = 0;
         foreach (CarDTO car in data.cars)
         {
-
-            Vector3 vect = new Vector3(car.x, car.y, 0);
+            Vector3 vect = new Vector3(car.x, 0.1f, car.y);
+            vect.x += 0.5f;
+            vect.z += 0.5f;
             carPaths[i].Add(vect);
             i++;
         }
-
-
-
-
     }
 
     void processResult(string json)
     {
 
-
         CarManager.cars = new List<Car>();
         Root data = JsonUtility.FromJson<Root>(json);
-
 
         foreach (var step in data.steps)
         {
             int i = 0;
             foreach (CarDTO car in step.cars)
             {
-                if (i >= carPaths.Count)
-                {
-                    Debug.LogError($"Index {i} out of range for carPaths");
-                    break;
-                }
-
-                carPaths[i].Add(new Vector3(car.x, car.y, 0));
+                Vector3 vect = new Vector3(car.x, 0.1f, car.y);
+                vect.x += 0.5f;
+                vect.z += 0.5f;
+                carPaths[i].Add(vect);
                 i++;
             }
         }
@@ -153,38 +151,22 @@ public class Conecction : MonoBehaviour
 
             int count = carPaths[i].Count;
 
-            // Si solo tiene 1 punto, rest será una lista vacía
             List<Vector3> rest = (count > 1)
                 ? carPaths[i].GetRange(1, count - 1)
                 : new List<Vector3>();
 
-            Debug.Log("resto: " + string.Join(", ", rest));
 
-            Debug.Log("Prefab array: " + CarManager.carPrefabs.Count);
+            Car car = Instantiate(carlogic).GetComponent<Car>();
 
-            if (CarManager.carPrefabs[2] == null)
-                Debug.LogError("carPrefabs[2] is NULL!");
-
-            GameObject test = CarManager.carPrefabs[2];
-            Debug.Log("Prefab name: " + test.name);
-
-            GameObject carObj = Instantiate(CarManager.carPrefabs[2]);
-
-            if (carObj == null)
-                Debug.LogError("Instantiate returned NULL!");
-
-            Car newCar = carObj.GetComponent<Car>();
-
-            if (newCar == null)
-                Debug.LogError("Car component missing on prefab!");
-
-            newCar.Initialize(
+            car.Initialize(
                 carPaths[i][0],
                 CarManager.carPrefabs[2],
                 rest
             );
 
-            CarManager.cars.Add(newCar);
+            CarManager.cars.Add(car);
+
+
         }
 
     }
@@ -196,13 +178,12 @@ public class Conecction : MonoBehaviour
         int i = 0;
         foreach (CarDTO car in data.cars)
         {
-
-            Vector3 vect = new Vector3(car.x, car.y, 0);
-            carPaths[i].Add(vect);
+            Vector3 vect = new Vector3(car.x, 0.1f, car.y);
+            vect.x += 0.5f;
+            vect.z += 0.5f;
+            CarManager.cars[i].targets.Add(vect);
             i++;
         }
-
-
 
 
     }
@@ -210,6 +191,14 @@ public class Conecction : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        if (requestingPoints) return;
+
+        if (CarManager.cars[0].targets.Count <= 1000000)
+        {
+            requestingPoints = true;
+            StartCoroutine(addpoint());
+        }
+
     }
 
     void PrintCarPaths()
@@ -224,6 +213,5 @@ public class Conecction : MonoBehaviour
             }
         }
     }
-
 
 }
