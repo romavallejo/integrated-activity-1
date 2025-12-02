@@ -14,26 +14,26 @@ public class Conecction : MonoBehaviour
 
     List<List<Vector3>> carPaths = new List<List<Vector3>>();
 
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
-    {
-        StartCoroutine(InitializeSequence());
 
+    {
+
+        for (int i = 0; i < 10; i++)
+        {
+            carPaths.Add(new List<Vector3>());
+        }
+
+        StartCoroutine(InitializeSequence());
     }
 
 
     IEnumerator InitializeSequence()
     {
-        for (int i = 0; i < 10; i++)
-        {
-
-            carPaths.Add(new List<Vector3>());
-        }
 
         yield return StartCoroutine(initCars());
         yield return StartCoroutine(getData());
-    }
 
+    }
 
     IEnumerator getData()
     {
@@ -58,6 +58,28 @@ public class Conecction : MonoBehaviour
         }
     }
 
+    IEnumerator addpoint()
+    {
+        using (UnityWebRequest request = UnityWebRequest.Get("http://127.0.0.1:5000/api/step"))
+        {
+            yield return request.SendWebRequest();
+
+            if (request.result == UnityWebRequest.Result.ConnectionError ||
+                request.result == UnityWebRequest.Result.ProtocolError)
+            {
+                Debug.LogError("Error: " + request.error);
+            }
+            else
+            {
+
+                string jsonResult = request.downloadHandler.text;
+
+                processResult(jsonResult);
+
+            }
+
+        }
+    }
     IEnumerator initCars()
     {
         using (UnityWebRequest request = UnityWebRequest.Get("http://127.0.0.1:5000/api/cars"))
@@ -88,9 +110,14 @@ public class Conecction : MonoBehaviour
         int i = 0;
         foreach (CarDTO car in data.cars)
         {
-            carPaths[i].Add(new Vector3(car.x, car.y, 0));
+
+            Vector3 vect = new Vector3(car.x, car.y, 0);
+            carPaths[i].Add(vect);
             i++;
         }
+
+
+
 
     }
 
@@ -107,20 +134,52 @@ public class Conecction : MonoBehaviour
             int i = 0;
             foreach (CarDTO car in step.cars)
             {
-                Debug.Log("(" + car.x + "," + car.y + ")");
+                if (i >= carPaths.Count)
+                {
+                    Debug.LogError($"Index {i} out of range for carPaths");
+                    break;
+                }
+
                 carPaths[i].Add(new Vector3(car.x, car.y, 0));
                 i++;
             }
-            Debug.Log("###########" + carPaths[1]);
         }
+
+
 
         for (int i = 0; i < 10; i++)
         {
-            List<Vector3> rest = carPaths[i].GetRange(1, carPaths[i].Count - 1);
 
-            Car newCar = new Car();
+
+            int count = carPaths[i].Count;
+
+            // Si solo tiene 1 punto, rest será una lista vacía
+            List<Vector3> rest = (count > 1)
+                ? carPaths[i].GetRange(1, count - 1)
+                : new List<Vector3>();
+
+            Debug.Log("resto: " + string.Join(", ", rest));
+
+            Debug.Log("Prefab array: " + CarManager.carPrefabs.Count);
+
+            if (CarManager.carPrefabs[2] == null)
+                Debug.LogError("carPrefabs[2] is NULL!");
+
+            GameObject test = CarManager.carPrefabs[2];
+            Debug.Log("Prefab name: " + test.name);
+
+            GameObject carObj = Instantiate(CarManager.carPrefabs[2]);
+
+            if (carObj == null)
+                Debug.LogError("Instantiate returned NULL!");
+
+            Car newCar = carObj.GetComponent<Car>();
+
+            if (newCar == null)
+                Debug.LogError("Car component missing on prefab!");
+
             newCar.Initialize(
-                new Vector3(carPaths[i][0].x, carPaths[i][0].y, 0),
+                carPaths[i][0],
                 CarManager.carPrefabs[2],
                 rest
             );
@@ -128,10 +187,25 @@ public class Conecction : MonoBehaviour
             CarManager.cars.Add(newCar);
         }
 
+    }
+
+    void addPoint(string json)
+    {
+        InitializeCar data = JsonUtility.FromJson<InitializeCar>(json);
+
+        int i = 0;
+        foreach (CarDTO car in data.cars)
+        {
+
+            Vector3 vect = new Vector3(car.x, car.y, 0);
+            carPaths[i].Add(vect);
+            i++;
+        }
+
+
 
 
     }
-
 
     // Update is called once per frame
     void Update()
@@ -142,12 +216,14 @@ public class Conecction : MonoBehaviour
     {
         for (int i = 0; i < carPaths.Count; i++)
         {
-            Debug.Log($"---- CarPath {i} ----");
-            foreach (var v in carPaths[i])
+            Debug.Log($"##### PATH {i} (count={carPaths[i].Count}) #####");
+
+            for (int j = 0; j < carPaths[i].Count; j++)
             {
-                Debug.Log(v);
+                Debug.Log($"{i}:{j} -> {carPaths[i][j]}");
             }
         }
     }
+
 
 }
