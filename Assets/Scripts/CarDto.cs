@@ -1,18 +1,3 @@
-using System.Collections.Generic;
-[System.Serializable]
-public class Root
-{
-    public List<Step> steps;
-}
-
-[System.Serializable]
-public class Step
-{
-    public List<CarDTO> cars;
-    public int step;
-    public float timestamp;
-}
-
 [System.Serializable]
 public class CarDTO
 {
@@ -21,6 +6,25 @@ public class CarDTO
     public int id;
     public int start_parking;
     public string state;
-    public int x;
-    public int y;
+    public float x;
+    public float y;
+}
+
+[System.Serializable]
+public class InitializeCar
+{
+    public CarDTO[] cars;
+}
+
+[System.Serializable]
+public class Step
+{
+    public CarDTO[] cars;
+    public int step;
+}
+
+[System.Serializable]
+public class Root
+{
+    public Step[] steps;
 }

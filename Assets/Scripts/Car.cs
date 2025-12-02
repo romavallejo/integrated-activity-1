@@ -1,10 +1,8 @@
-using System;
+
 using System.Collections.Generic;
 using NUnit.Framework;
 using Unity.Mathematics;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 public class Car : MonoBehaviour
 {
@@ -27,11 +25,11 @@ public class Car : MonoBehaviour
     public Vector3 pivotPosition;
 
     //to indicate teh car is moving forward
-    public bool movingForward,  waiting;
+    public bool movingForward, waiting;
     public int waitingTimer;
 
     public void Initialize(Vector3 initPos, GameObject prefab, List<Vector3> initTargets)
-    { 
+    {
         waitingTimer = 0;
         rotationProgress = 0;
         movingForward = false;
@@ -48,10 +46,10 @@ public class Car : MonoBehaviour
         float angle = MathFunctions.AngleBetween(defaultDir, desiredDir);
         float sign = MathFunctions.CrossProduct(defaultDir, desiredDir).y >= 0 ? 1f : -1f;
         rot = MathFunctions.RotateY(angle * sign);
-        
+
         mem = tra * rot;
         //mem = tra;
-       
+
         outOfParking = true;
 
         MeshFilter mf = carInstance.GetComponent<MeshFilter>();
@@ -61,8 +59,9 @@ public class Car : MonoBehaviour
         mf.mesh.vertices = transformed.ToArray();
         mf.mesh.RecalculateNormals();
         targets = initTargets;
-        targets.Insert(0,initPos);
+        targets.Insert(0, initPos);
     }
+
 
     public void addTarget(Vector3 target)
     {
@@ -71,29 +70,40 @@ public class Car : MonoBehaviour
 
     private bool rotationNeeded(Vector3 A, Vector3 B, Vector3 C)
     {
-        Vector3 dirIn  = MathFunctions.Normalize(B - A);
+        Vector3 dirIn = MathFunctions.Normalize(B - A);
         Vector3 dirOut = MathFunctions.Normalize(C - B);
         return MathFunctions.DotProduct(dirIn, dirOut) < 0.99f;
     }
 
+    public void calcPivot()
+    {
+        Vector3 A = targets[0];
+        Vector3 B = targets[1];
+        Vector3 C = targets[2];
+
+        float pivotX = (A.x + C.x) * 0.5f;
+        float pivotZ = (A.z + C.z) * 0.5f;
+
+        pivotPosition = new Vector3(pivotX, B.y, pivotZ);
+    }
+
     public void takeCorner()
     {
-    Matrix4x4 notP = MathFunctions.TranslateM(-pivotPosition);
-    Matrix4x4 rotM = MathFunctions.RotateY(rotationProgressStep); 
-    Matrix4x4 yesP = MathFunctions.TranslateM(pivotPosition);
-    mem = yesP * rotM * notP * mem;
+        Matrix4x4 notP = MathFunctions.TranslateM(-pivotPosition);
+        Matrix4x4 rotM = MathFunctions.RotateY(rotationProgressStep);
+        Matrix4x4 yesP = MathFunctions.TranslateM(pivotPosition);
+        mem = yesP * rotM * notP * mem;
     }
 
     public void moveForward(float speed)
     {
-        Matrix4x4 forward = MathFunctions.TranslateM(new Vector3(speed,0,0));
+        Matrix4x4 forward = MathFunctions.TranslateM(new Vector3(speed, 0, 0));
         mem = mem * forward;
     }
 
     public void Update()
     {
-        currPos = new Vector3(mem[0,3], mem[1,3], mem[2,3]);
-        Debug.Log(currPos);
+        currPos = new Vector3(mem[0, 3], mem[1, 3], mem[2, 3]);
 
         if (preparingForCorner)
         {
@@ -118,47 +128,27 @@ public class Car : MonoBehaviour
                 takingCorner = false;
                 rotationProgress = 0;
                 targets.RemoveAt(0);
-                /*
-                if (targets.Count > 2)
-                    if (rotationNeeded(currPos,targets[1],targets[2]))
-                    {
-                        Vector3 A = currPos;
-                        Vector3 B = targets[0];
-                        Vector3 C = targets[1];
-
-                        Vector3 dirIn  = MathFunctions.Normalize(B - A);
-                        Vector3 dirOut = MathFunctions.Normalize(C - B);
-
-                        float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
-                        rotationProgressStep = (cross > 0) ? -0.9f : 0.9f;
-
-                        float pivotX = (A.x + C.x) * 0.5f;
-                        float pivotZ = (A.z + C.z) * 0.5f;
-
-                        //pivotPosition = new Vector3(pivotX, B.y, pivotZ);
-                        pivotPosition = new Vector3((float)Math.Round(pivotX), B.y, (float)Math.Round(pivotZ));
-                        Debug.Log("PIVOT: "+pivotPosition);
-
-                        takingCorner = true;
-                    }  
-                    */
+                //currTarget = targets[0]; // dont understand why i needed this but is needed
             }
-        }   
-        
+        }
+
         else if (movingForward)
         {
             if (Vector3.Distance(currPos, currTarget) <= 0.02f)
-            {   
+            {
                 movingForward = false;
                 targets.RemoveAt(0);
                 if (targets.Count > 1)
-                    if (rotationNeeded(currPos,targets[0],targets[1]))
+                    if (rotationNeeded(currPos, targets[0], targets[1]))
                     {
+                        Vector3 currentForward = new Vector3(mem[0, 0], mem[1, 0], mem[2, 0]);
+                        Vector3 toTarget = MathFunctions.Normalize(targets[1] - currPos);
+
                         Vector3 A = currPos;
                         Vector3 B = targets[0];
                         Vector3 C = targets[1];
 
-                        Vector3 dirIn  = MathFunctions.Normalize(B - A);
+                        Vector3 dirIn = MathFunctions.Normalize(B - A);
                         Vector3 dirOut = MathFunctions.Normalize(C - B);
 
                         float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
@@ -167,16 +157,14 @@ public class Car : MonoBehaviour
                         float pivotX = (A.x + C.x) * 0.5f;
                         float pivotZ = (A.z + C.z) * 0.5f;
 
-                        //pivotPosition = new Vector3(pivotX, B.y, pivotZ);
-                        pivotPosition = new Vector3((float)Math.Round(pivotX), B.y, (float)Math.Round(pivotZ));
-                        Debug.Log("PIVOT: "+pivotPosition);
+                        pivotPosition = new Vector3(pivotX, B.y, pivotZ);
 
                         preparingForCorner = true;
                     }
             }
             moveForward(0.01f);
         }
-        
+
         else if (waiting)
         {
             Debug.Log("waiting");
@@ -188,39 +176,39 @@ public class Car : MonoBehaviour
                 targets.RemoveAt(0);
             }
         }
-        
+
         else if (targets.Count > 0)
         {
-            currTarget = targets[0];    
-            Debug.Log("next target: "+currTarget);
+            currTarget = targets[0];
+            Debug.Log("next target: " + currTarget);
 
             if (outOfParking)
             {
+                Vector3 currentForward = new Vector3(mem[0, 0], mem[1, 0], mem[2, 0]);
+                Vector3 toTarget = MathFunctions.Normalize(targets[1] - currPos);
+
                 Vector3 A = targets[0];
                 Vector3 B = targets[1];
                 Vector3 C = targets[2];
 
-                Vector3 dirIn  = MathFunctions.Normalize(B - A);
+                Vector3 dirIn = MathFunctions.Normalize(B - A);
                 Vector3 dirOut = MathFunctions.Normalize(C - B);
 
                 float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
                 rotationProgressStep = (cross > 0) ? -0.9f : 0.9f;
 
                 float pivotX = (A.x + C.x) * 0.5f;
-                float pivotZ = (A.z + C.z) * 0.5f;  
-
-                //pivotPosition = new Vector3(pivotX, B.y, pivotZ);
-                pivotPosition = new Vector3((float)Math.Round(pivotX), B.y, (float)Math.Round(pivotZ)); 
-                Debug.Log("PIVOT: "+pivotPosition); 
+                float pivotZ = (A.z + C.z) * 0.5f;
+                pivotPosition = new Vector3(pivotX, B.y, pivotZ);
 
                 preparingForCorner = true;
             }
 
             if (Vector3.Distance(currPos, currTarget) <= 0.02f)
                 waiting = true;
-            
+
             else movingForward = true;
-            
+
         }
 
         List<Vector3> transformed = MathFunctions.ApplyTransform(mem, originals);
@@ -228,3 +216,4 @@ public class Car : MonoBehaviour
         carInstance.GetComponent<MeshFilter>().mesh.RecalculateNormals();
     }
 }
+
