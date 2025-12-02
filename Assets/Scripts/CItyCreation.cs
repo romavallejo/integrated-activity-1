@@ -78,7 +78,7 @@ public class CItyCreation : MonoBehaviour
     public GameObject bench;
     public GameObject lightPost;
     public GameObject fountain;
-    
+
     public GameObject stopLightSingle;
 
     void createCityBase()
@@ -104,7 +104,7 @@ public class CItyCreation : MonoBehaviour
             2,3,7, 7,3,5,
             6,4,0, 0,4,1
         };
-    
+
         Mesh m;
 
         GameObject go;
@@ -123,7 +123,7 @@ public class CItyCreation : MonoBehaviour
         mem = MathFunctions.TranslateM(new Vector3(12.5f, 0.0f, 12.5f));
         Matrix4x4 temp = mem * scale;
         List<Vector3> geo = MathFunctions.ApplyTransform(temp, geometry);
-        
+
         go.GetComponent<MeshFilter>().mesh.vertices = geo.ToArray();
         go.GetComponent<MeshFilter>().mesh.RecalculateNormals();
     }
@@ -134,7 +134,7 @@ public class CItyCreation : MonoBehaviour
         {
             for (float j = 0.5f; j < 25; j++)
             {
-                cityPositions.Add(new Vector3(i,0,j));
+                cityPositions.Add(new Vector3(i, 0, j));
             }
         }
 
@@ -147,19 +147,19 @@ public class CItyCreation : MonoBehaviour
                     horistonalStreet = Instantiate(crossing, cityPositions[i], Quaternion.identity);
                 else
                     horistonalStreet = Instantiate(straightStreet, cityPositions[i], Quaternion.identity);
-                horistonalStreet.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                horistonalStreet.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 if (cityInformation[i].Contains("<"))
                     horistonalStreet.transform.localRotation = Quaternion.Euler(0, 180, 0);
                 if (cityInformation[i].Contains("I"))
                 {
-                    GameObject light = Instantiate(lightPost,cityPositions[i],Quaternion.identity);
+                    GameObject light = Instantiate(lightPost, cityPositions[i], Quaternion.identity);
                 }
                 else if (cityInformation[i].Contains("S"))
                 {
-                    GameObject stopLight = Instantiate(stopLightSingle,cityPositions[i],Quaternion.identity);
+                    GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
                     if (cityInformation[i].Contains(">"))
                     {
-                        stopLight.transform.localRotation = Quaternion.Euler(0,180, 0);
+                        stopLight.transform.localRotation = Quaternion.Euler(0, 180, 0);
                     }
                 }
             }
@@ -167,89 +167,89 @@ public class CItyCreation : MonoBehaviour
             {
                 GameObject verticalStreet;
                 if (cityInformation[i].Contains("C"))
-                    verticalStreet = Instantiate(crossing,cityPositions[i], Quaternion.identity);
+                    verticalStreet = Instantiate(crossing, cityPositions[i], Quaternion.identity);
                 else
-                    verticalStreet = Instantiate(straightStreet,cityPositions[i], Quaternion.identity);
-                verticalStreet.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                    verticalStreet = Instantiate(straightStreet, cityPositions[i], Quaternion.identity);
+                verticalStreet.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 if (cityInformation[i].Contains("^"))
                     verticalStreet.transform.localRotation = Quaternion.Euler(0, -90, 0);
                 else
                     verticalStreet.transform.localRotation = Quaternion.Euler(0, 90, 0);
                 if (cityInformation[i].Contains("I"))
                 {
-                    GameObject light = Instantiate(lightPost,cityPositions[i],Quaternion.identity);
+                    GameObject light = Instantiate(lightPost, cityPositions[i], Quaternion.identity);
                     light.transform.localRotation = Quaternion.Euler(0, 90, 0);
                 }
                 else if (cityInformation[i].Contains("S"))
                 {
                     if (cityInformation[i].Contains("^"))
                     {
-                        GameObject stopLight = Instantiate(stopLightSingle,cityPositions[i],Quaternion.identity);
-                        stopLight.transform.localRotation = Quaternion.Euler(0,90, 0);
-                    } 
+                        GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
+                        stopLight.transform.localRotation = Quaternion.Euler(0, 90, 0);
+                    }
                     else if (cityInformation[i].Contains("v"))
                     {
-                        GameObject stopLight = Instantiate(stopLightSingle,cityPositions[i],Quaternion.identity);
-                        stopLight.transform.localRotation = Quaternion.Euler(0,270, 0);
+                        GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
+                        stopLight.transform.localRotation = Quaternion.Euler(0, 270, 0);
                     }
                 }
             }
             else if (cityInformation[i].Contains("L"))
             {
-                GameObject cornerStreet = Instantiate(L,cityPositions[i], Quaternion.identity);
-                cornerStreet.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
-                cornerStreet.transform.localRotation = Quaternion.Euler(0,int.Parse(cityInformation[i][1].ToString())*90,0);
+                GameObject cornerStreet = Instantiate(L, cityPositions[i], Quaternion.identity);
+                cornerStreet.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                cornerStreet.transform.localRotation = Quaternion.Euler(0, int.Parse(cityInformation[i][1].ToString()) * 90, 0);
             }
             else if (cityInformation[i].Contains("T"))
             {
-                GameObject tStreet = Instantiate(T,cityPositions[i], Quaternion.identity);
-                tStreet.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                GameObject tStreet = Instantiate(T, cityPositions[i], Quaternion.identity);
+                tStreet.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
                 if (cityInformation[i].Contains("S"))
                 {
-                    tStreet.transform.localRotation = Quaternion.Euler(0,int.Parse(cityInformation[i][2].ToString())*90, 0);
-                    GameObject stopLight = Instantiate(stopLightSingle,cityPositions[i],Quaternion.identity);
-                    stopLight.transform.localRotation = Quaternion.Euler(0,cityInformation[i][3]*90, 0);
+                    tStreet.transform.localRotation = Quaternion.Euler(0, int.Parse(cityInformation[i][2].ToString()) * 90, 0);
+                    GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
+                    stopLight.transform.localRotation = Quaternion.Euler(0, cityInformation[i][3] * 90, 0);
                 }
-                else 
-                    tStreet.transform.localRotation = Quaternion.Euler(0,int.Parse(cityInformation[i][1].ToString())*90, 0);
+                else
+                    tStreet.transform.localRotation = Quaternion.Euler(0, int.Parse(cityInformation[i][1].ToString()) * 90, 0);
             }
             else if (cityInformation[i].Contains("X"))
             {
-                GameObject xStreet = Instantiate(X,cityPositions[i], Quaternion.identity);
-                xStreet.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                GameObject xStreet = Instantiate(X, cityPositions[i], Quaternion.identity);
+                xStreet.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             }
             else if (cityInformation[i].Contains("P"))
             {
-                GameObject park = Instantiate(parking,cityPositions[i], Quaternion.identity);
-                park.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
-                park.transform.localRotation = Quaternion.Euler(0,int.Parse(cityInformation[i][1].ToString())*90, 0);
+                GameObject park = Instantiate(parking, cityPositions[i], Quaternion.identity);
+                park.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                park.transform.localRotation = Quaternion.Euler(0, int.Parse(cityInformation[i][1].ToString()) * 90, 0);
             }
             else if (cityInformation[i] == "F")
             {
                 int randomInt = UnityEngine.Random.Range(0, 3);
-                GameObject[] trees = new GameObject[] {tree1,tree2,tree3};
+                GameObject[] trees = new GameObject[] { tree1, tree2, tree3 };
                 GameObject tree = Instantiate(trees[randomInt], cityPositions[i], Quaternion.identity);
-                tree.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
+                tree.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
             }
             else if (cityInformation[i].Contains("B"))
             {
                 int randomInt = UnityEngine.Random.Range(0, 8);
-                GameObject[] buldings = new GameObject[] {buildingA,buildingB,buildingC,buildingD,buildingE,buildingF,buildingG,buildingH};
+                GameObject[] buldings = new GameObject[] { buildingA, buildingB, buildingC, buildingD, buildingE, buildingF, buildingG, buildingH };
                 GameObject bulding = Instantiate(buldings[randomInt], cityPositions[i], Quaternion.identity);
-                bulding.transform.localScale = new Vector3(0.5f,0.5f,0.5f);
-                bulding.transform.localRotation = Quaternion.Euler(0,int.Parse(cityInformation[i][1].ToString())*90, 0);
+                bulding.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f);
+                bulding.transform.localRotation = Quaternion.Euler(0, int.Parse(cityInformation[i][1].ToString()) * 90, 0);
             }
             else if (cityInformation[i] == "Y")
             {
-                GameObject fountainArea = Instantiate(fountain,new Vector3(cityPositions[i].x+0.5f,cityPositions[i].y,cityPositions[i].z+0.5f),Quaternion.identity);
+                GameObject fountainArea = Instantiate(fountain, new Vector3(cityPositions[i].x + 0.5f, cityPositions[i].y, cityPositions[i].z + 0.5f), Quaternion.identity);
                 int randomInt = UnityEngine.Random.Range(0, 4);
-                fountainArea.transform.localRotation = Quaternion.Euler(0, randomInt*90, 0);
+                fountainArea.transform.localRotation = Quaternion.Euler(0, randomInt * 90, 0);
             }
             else if (cityInformation[i] == "K")
             {
-                GameObject benchArea = Instantiate(bench,cityPositions[i],Quaternion.identity);
+                GameObject benchArea = Instantiate(bench, cityPositions[i], Quaternion.identity);
                 int randomInt = UnityEngine.Random.Range(0, 4);
-                benchArea.transform.localRotation = Quaternion.Euler(0, randomInt*90, 0);
+                benchArea.transform.localRotation = Quaternion.Euler(0, randomInt * 90, 0);
             }
         }
     }
@@ -262,6 +262,6 @@ public class CItyCreation : MonoBehaviour
 
     void Update()
     {
-        
+
     }
 }
