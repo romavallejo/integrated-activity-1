@@ -22,7 +22,7 @@ public class CarManager : MonoBehaviour
         //choose random car
         carPrefabs = new List<GameObject>() { convertible, pickuptruck, cybertruck, sedan };
         int randomInt = UnityEngine.Random.Range(0, 3);
-        // Car car = Instantiate(carScriptLogic).GetComponent<Car>();
+        Car car = Instantiate(carScriptLogic).GetComponent<Car>();
         //so the innit position needs to be the car, then the next tree targets
         //car.Initialize(new Vector3(2.5f, 0.1f, 1.5f), carPrefabs[2], new List<Vector3>()
         /*car.Initialize(new Vector3(2.5f,0.1f,1.5f),carPrefabs[1], new List<Vector3>()
