@@ -27,6 +27,8 @@ public class Car : MonoBehaviour
     //to indicate teh car is moving forward
     public bool movingForward, waiting;
     public int waitingTimer;
+    public Conecction connection;   // Drag the GameObject in the Inspector
+
 
     public void Initialize(Vector3 initPos, GameObject prefab, List<Vector3> initTargets)
     {
@@ -103,117 +105,122 @@ public class Car : MonoBehaviour
 
     public void Update()
     {
-        currPos = new Vector3(mem[0, 3], mem[1, 3], mem[2, 3]);
-
-        if (preparingForCorner)
+        if (connection.requestingPoints == true)
         {
-            rotationProgress++;
-            moveForward(0.01f);
-            if (rotationProgress == 50)
+
+
+            currPos = new Vector3(mem[0, 3], mem[1, 3], mem[2, 3]);
+
+            if (preparingForCorner)
             {
+                rotationProgress++;
+                moveForward(0.01f);
+                if (rotationProgress == 50)
+                {
+                    if (outOfParking)
+                        outOfParking = false;
+                    rotationProgress = 0;
+                    preparingForCorner = false;
+                    takingCorner = true;
+                }
+            }
+
+            else if (takingCorner)
+            {
+                takeCorner();
+                rotationProgress++;
+                if (rotationProgress == 100)
+                {
+                    takingCorner = false;
+                    rotationProgress = 0;
+                    targets.RemoveAt(0);
+                    //currTarget = targets[0]; // dont understand why i needed this but is needed
+                }
+            }
+
+            else if (movingForward)
+            {
+                if (Vector3.Distance(currPos, currTarget) <= 0.02f)
+                {
+                    movingForward = false;
+                    targets.RemoveAt(0);
+                    if (targets.Count > 1)
+                        if (rotationNeeded(currPos, targets[0], targets[1]))
+                        {
+                            Vector3 currentForward = new Vector3(mem[0, 0], mem[1, 0], mem[2, 0]);
+                            Vector3 toTarget = MathFunctions.Normalize(targets[1] - currPos);
+
+                            Vector3 A = currPos;
+                            Vector3 B = targets[0];
+                            Vector3 C = targets[1];
+
+                            Vector3 dirIn = MathFunctions.Normalize(B - A);
+                            Vector3 dirOut = MathFunctions.Normalize(C - B);
+
+                            float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
+                            rotationProgressStep = (cross > 0) ? -0.9f : 0.9f;
+
+                            float pivotX = (A.x + C.x) * 0.5f;
+                            float pivotZ = (A.z + C.z) * 0.5f;
+
+                            pivotPosition = new Vector3(pivotX, B.y, pivotZ);
+
+                            preparingForCorner = true;
+                        }
+                }
+                moveForward(0.01f);
+            }
+
+            else if (waiting)
+            {
+                Debug.Log("waiting");
+                waitingTimer++;
+                if (waitingTimer == 100)
+                {
+                    waiting = false;
+                    waitingTimer = 0;
+                    targets.RemoveAt(0);
+                }
+            }
+
+            else if (targets.Count > 0)
+            {
+                currTarget = targets[0];
+                Debug.Log("next target: " + currTarget);
+
                 if (outOfParking)
-                    outOfParking = false;
-                rotationProgress = 0;
-                preparingForCorner = false;
-                takingCorner = true;
-            }
-        }
+                {
+                    Vector3 currentForward = new Vector3(mem[0, 0], mem[1, 0], mem[2, 0]);
+                    Vector3 toTarget = MathFunctions.Normalize(targets[1] - currPos);
 
-        else if (takingCorner)
-        {
-            takeCorner();
-            rotationProgress++;
-            if (rotationProgress == 100)
-            {
-                takingCorner = false;
-                rotationProgress = 0;
-                targets.RemoveAt(0);
-                //currTarget = targets[0]; // dont understand why i needed this but is needed
-            }
-        }
+                    Vector3 A = targets[0];
+                    Vector3 B = targets[1];
+                    Vector3 C = targets[2];
 
-        else if (movingForward)
-        {
-            if (Vector3.Distance(currPos, currTarget) <= 0.02f)
-            {
-                movingForward = false;
-                targets.RemoveAt(0);
-                if (targets.Count > 1)
-                    if (rotationNeeded(currPos, targets[0], targets[1]))
-                    {
-                        Vector3 currentForward = new Vector3(mem[0, 0], mem[1, 0], mem[2, 0]);
-                        Vector3 toTarget = MathFunctions.Normalize(targets[1] - currPos);
+                    Vector3 dirIn = MathFunctions.Normalize(B - A);
+                    Vector3 dirOut = MathFunctions.Normalize(C - B);
 
-                        Vector3 A = currPos;
-                        Vector3 B = targets[0];
-                        Vector3 C = targets[1];
+                    float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
+                    rotationProgressStep = (cross > 0) ? -0.9f : 0.9f;
 
-                        Vector3 dirIn = MathFunctions.Normalize(B - A);
-                        Vector3 dirOut = MathFunctions.Normalize(C - B);
+                    float pivotX = (A.x + C.x) * 0.5f;
+                    float pivotZ = (A.z + C.z) * 0.5f;
+                    pivotPosition = new Vector3(pivotX, B.y, pivotZ);
 
-                        float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
-                        rotationProgressStep = (cross > 0) ? -0.9f : 0.9f;
+                    preparingForCorner = true;
+                }
 
-                        float pivotX = (A.x + C.x) * 0.5f;
-                        float pivotZ = (A.z + C.z) * 0.5f;
+                if (Vector3.Distance(currPos, currTarget) <= 0.02f)
+                    waiting = true;
 
-                        pivotPosition = new Vector3(pivotX, B.y, pivotZ);
+                else movingForward = true;
 
-                        preparingForCorner = true;
-                    }
-            }
-            moveForward(0.01f);
-        }
-
-        else if (waiting)
-        {
-            Debug.Log("waiting");
-            waitingTimer++;
-            if (waitingTimer == 100)
-            {
-                waiting = false;
-                waitingTimer = 0;
-                targets.RemoveAt(0);
-            }
-        }
-
-        else if (targets.Count > 0)
-        {
-            currTarget = targets[0];
-            Debug.Log("next target: " + currTarget);
-
-            if (outOfParking)
-            {
-                Vector3 currentForward = new Vector3(mem[0, 0], mem[1, 0], mem[2, 0]);
-                Vector3 toTarget = MathFunctions.Normalize(targets[1] - currPos);
-
-                Vector3 A = targets[0];
-                Vector3 B = targets[1];
-                Vector3 C = targets[2];
-
-                Vector3 dirIn = MathFunctions.Normalize(B - A);
-                Vector3 dirOut = MathFunctions.Normalize(C - B);
-
-                float cross = dirIn.x * dirOut.z - dirIn.z * dirOut.x;
-                rotationProgressStep = (cross > 0) ? -0.9f : 0.9f;
-
-                float pivotX = (A.x + C.x) * 0.5f;
-                float pivotZ = (A.z + C.z) * 0.5f;
-                pivotPosition = new Vector3(pivotX, B.y, pivotZ);
-
-                preparingForCorner = true;
             }
 
-            if (Vector3.Distance(currPos, currTarget) <= 0.02f)
-                waiting = true;
-
-            else movingForward = true;
-
+            List<Vector3> transformed = MathFunctions.ApplyTransform(mem, originals);
+            carInstance.GetComponent<MeshFilter>().mesh.vertices = transformed.ToArray();
+            carInstance.GetComponent<MeshFilter>().mesh.RecalculateNormals();
         }
-
-        List<Vector3> transformed = MathFunctions.ApplyTransform(mem, originals);
-        carInstance.GetComponent<MeshFilter>().mesh.vertices = transformed.ToArray();
-        carInstance.GetComponent<MeshFilter>().mesh.RecalculateNormals();
     }
 }
 

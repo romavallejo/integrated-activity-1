@@ -12,7 +12,7 @@ public class Conecction : MonoBehaviour
 {
 
     public GameObject carlogic;
-    private bool requestingPoints = false;
+    public bool requestingPoints = false;
 
     List<List<Vector3>> carPaths = new List<List<Vector3>>();
 
@@ -116,7 +116,7 @@ public class Conecction : MonoBehaviour
         int i = 0;
         foreach (CarDTO car in data.cars)
         {
-            Vector3 vect = new Vector3(car.x, 0.1f, car.y);
+            Vector3 vect = new Vector3(24 - car.y, 0.1f, car.x);
             vect.x += 0.5f;
             vect.z += 0.5f;
             carPaths[i].Add(vect);
@@ -135,7 +135,7 @@ public class Conecction : MonoBehaviour
             int i = 0;
             foreach (CarDTO car in step.cars)
             {
-                Vector3 vect = new Vector3(car.x, 0.1f, car.y);
+                Vector3 vect = new Vector3(24 - car.y, 0.1f, car.x);
                 vect.x += 0.5f;
                 vect.z += 0.5f;
                 carPaths[i].Add(vect);
@@ -158,6 +158,8 @@ public class Conecction : MonoBehaviour
 
             Car car = Instantiate(carlogic).GetComponent<Car>();
 
+            car.connection = this;
+
             car.Initialize(
                 carPaths[i][0],
                 CarManager.carPrefabs[2],
@@ -178,7 +180,7 @@ public class Conecction : MonoBehaviour
         int i = 0;
         foreach (CarDTO car in data.cars)
         {
-            Vector3 vect = new Vector3(car.x, 0.1f, car.y);
+            Vector3 vect = new Vector3(24 - car.y, 0.1f, car.x);
             vect.x += 0.5f;
             vect.z += 0.5f;
             CarManager.cars[i].targets.Add(vect);
