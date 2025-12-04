@@ -160,31 +160,31 @@ MonoBehaviour:
   m_GameObject: {fileID: 297967014}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e613347c5ff8c9a4e835fa745e39c34b, type: 3}
+  m_Script: {fileID: 11500000, guid: a1eace5e935984c48b0678dfe0cb677e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::CItyCreation
-  graassMaterial: {fileID: 2100000, guid: 148d0965fe2bd684aad1c5ea76e4caf3, type: 2}
-  straightStreet: {fileID: 6313050211412756526, guid: 03a8a433f28510a409471529f3bc5433, type: 3}
-  crossing: {fileID: 8432225729227530914, guid: 25c286b50a2c4314d86f624b4ed46029, type: 3}
-  L: {fileID: 919132149155446097, guid: 866697b1b6c57460f8a1354791f07c3e, type: 3}
-  T: {fileID: 919132149155446097, guid: 1b56fe42e6e1a4c5eaf29d78e46ec4c8, type: 3}
-  X: {fileID: 919132149155446097, guid: f2ed7e48b5ac747b7b178de6b548e358, type: 3}
-  parking: {fileID: 7283868487795017378, guid: 3879a2c722764164a9cbf8dc7857a203, type: 3}
-  tree1: {fileID: 919132149155446097, guid: da74a3e49d1faf64b9ed3869f9634834, type: 3}
-  tree2: {fileID: 919132149155446097, guid: 87786ee75ac22f54d9d55d27709bf88d, type: 3}
-  tree3: {fileID: 919132149155446097, guid: e8442311fee4f344598cfbf8b0d23bd5, type: 3}
-  buildingA: {fileID: 919132149155446097, guid: d6bc2467d3f23472790926118595087a, type: 3}
-  buildingB: {fileID: 919132149155446097, guid: b93474e70bc3a417f86c9b242436cbd2, type: 3}
-  buildingC: {fileID: 919132149155446097, guid: b4dade183295641c09c4cbedb773409c, type: 3}
-  buildingD: {fileID: 919132149155446097, guid: 9e0a0bac92dfc492c8acf27cb6992625, type: 3}
-  buildingE: {fileID: 919132149155446097, guid: 9a99c4337385f4b6d914dc3663c0e412, type: 3}
-  buildingF: {fileID: 919132149155446097, guid: 712ea22927ad04bb5b638059c833875d, type: 3}
-  buildingG: {fileID: 919132149155446097, guid: 7b28bef6cb98049739c1279c6eb0cdf1, type: 3}
-  buildingH: {fileID: 919132149155446097, guid: a3618b0100bd0449a99fbd67979ce779, type: 3}
-  bench: {fileID: 8045579974334571706, guid: 8660ba216a78f094199cd91c16c27807, type: 3}
-  lightPost: {fileID: 8690592395768990615, guid: 55f694332d9c0794b9846b84625cd675, type: 3}
-  fountain: {fileID: 6120303410340076247, guid: 4038cb0c417dc57469db144f74b12c7f, type: 3}
-  stopLightSingle: {fileID: 2842863860463396438, guid: dfd9150eadc8aaf4aa7147eb4f4f43a2, type: 3}
+  graassMaterial: {fileID: 0}
+  straightStreet: {fileID: 0}
+  crossing: {fileID: 0}
+  L: {fileID: 0}
+  T: {fileID: 0}
+  X: {fileID: 0}
+  parking: {fileID: 0}
+  tree1: {fileID: 0}
+  tree2: {fileID: 0}
+  tree3: {fileID: 0}
+  buildingA: {fileID: 0}
+  buildingB: {fileID: 0}
+  buildingC: {fileID: 0}
+  buildingD: {fileID: 0}
+  buildingE: {fileID: 0}
+  buildingF: {fileID: 0}
+  buildingG: {fileID: 0}
+  buildingH: {fileID: 0}
+  bench: {fileID: 0}
+  lightPost: {fileID: 0}
+  fountain: {fileID: 0}
+  stopLightSingle: {fileID: 0}
 --- !u!1 &1313146542
 GameObject:
   m_ObjectHideFlags: 0
@@ -352,6 +352,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Conecction
   carlogic: {fileID: 8703703078443097810, guid: bcca8eee5a6183940b06e2d5b7426ea6, type: 3}
+  requestingPoints: 0
 --- !u!4 &2039299653
 Transform:
   m_ObjectHideFlags: 0

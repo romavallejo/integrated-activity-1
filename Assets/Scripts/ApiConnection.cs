@@ -119,7 +119,8 @@ public class Conecction : MonoBehaviour
             Vector3 vect = new Vector3(24 - car.y, 0.1f, car.x);
             vect.x += 0.5f;
             vect.z += 0.5f;
-            carPaths[i].Add(vect);
+            int id = car.id - 21;
+            carPaths[id].Add(vect);
             i++;
         }
     }
@@ -138,7 +139,8 @@ public class Conecction : MonoBehaviour
                 Vector3 vect = new Vector3(24 - car.y, 0.1f, car.x);
                 vect.x += 0.5f;
                 vect.z += 0.5f;
-                carPaths[i].Add(vect);
+                int id = car.id - 21;
+                carPaths[id].Add(vect);
                 i++;
             }
         }
@@ -156,13 +158,22 @@ public class Conecction : MonoBehaviour
                 : new List<Vector3>();
 
 
-            Car car = Instantiate(carlogic).GetComponent<Car>();
+            //car.connection = this;
 
-            car.connection = this;
+            if (i == 4)
+            {
+                Debug.Log("Init Pos: " + carPaths[i][0]);
+                Debug.Log("targets[0]: " + rest[0]);
+                Debug.Log("targets[1]: " + rest[1]);
+
+            }
+
+
+            Car car = Instantiate(carlogic).GetComponent<Car>();
 
             car.Initialize(
                 carPaths[i][0],
-                CarManager.carPrefabs[2],
+                CarManager.carPrefabs[UnityEngine.Random.Range(0, 4)],
                 rest
             );
 
@@ -183,7 +194,14 @@ public class Conecction : MonoBehaviour
             Vector3 vect = new Vector3(24 - car.y, 0.1f, car.x);
             vect.x += 0.5f;
             vect.z += 0.5f;
-            CarManager.cars[i].targets.Add(vect);
+
+            int id = car.id - 21;
+            CarManager.cars[id].targets.Add(vect);
+            if (i == 4)
+            {
+                Debug.Log("Adding poitn: " + vect);
+            }
+
             i++;
         }
 

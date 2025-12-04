@@ -7,6 +7,7 @@ public class CItyCreation : MonoBehaviour
 {
     public Material graassMaterial;
     List<Vector3> cityPositions = new List<Vector3>();
+    private int trafficLightCounter = 1;
     /*
     > || <: horizontal street
     ^ || v: vertical street
@@ -156,11 +157,13 @@ public class CItyCreation : MonoBehaviour
                 }
                 else if (cityInformation[i].Contains("S"))
                 {
-                    GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
+                    //GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
+                    TrafficLightManager tl = CreateTrafficLight(cityPositions[i]);
                     if (cityInformation[i].Contains(">"))
                     {
-                        stopLight.transform.localRotation = Quaternion.Euler(0, 180, 0);
+                        tl.transform.localRotation = Quaternion.Euler(0, 180, 0);
                     }
+                    
                 }
             }
             else if (cityInformation[i].Contains("^") || cityInformation[i].Contains("v"))
@@ -184,13 +187,15 @@ public class CItyCreation : MonoBehaviour
                 {
                     if (cityInformation[i].Contains("^"))
                     {
-                        GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
-                        stopLight.transform.localRotation = Quaternion.Euler(0, 90, 0);
+                        //GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
+                        TrafficLightManager tl = CreateTrafficLight(cityPositions[i]);
+                        tl.transform.localRotation = Quaternion.Euler(0, 90, 0);
                     }
                     else if (cityInformation[i].Contains("v"))
                     {
-                        GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
-                        stopLight.transform.localRotation = Quaternion.Euler(0, 270, 0);
+                        //GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
+                        TrafficLightManager tl = CreateTrafficLight(cityPositions[i]);
+                        tl.transform.localRotation = Quaternion.Euler(0, 270, 0);
                     }
                 }
             }
@@ -207,8 +212,9 @@ public class CItyCreation : MonoBehaviour
                 if (cityInformation[i].Contains("S"))
                 {
                     tStreet.transform.localRotation = Quaternion.Euler(0, int.Parse(cityInformation[i][2].ToString()) * 90, 0);
-                    GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
-                    stopLight.transform.localRotation = Quaternion.Euler(0, cityInformation[i][3] * 90, 0);
+                    //GameObject stopLight = Instantiate(stopLightSingle, cityPositions[i], Quaternion.identity);
+                    TrafficLightManager tl = CreateTrafficLight(cityPositions[i]);
+                    tl.transform.localRotation = Quaternion.Euler(0, cityInformation[i][3] * 90, 0);
                 }
                 else
                     tStreet.transform.localRotation = Quaternion.Euler(0, int.Parse(cityInformation[i][1].ToString()) * 90, 0);
@@ -263,5 +269,28 @@ public class CItyCreation : MonoBehaviour
     void Update()
     {
 
+    }
+
+ TrafficLightManager CreateTrafficLight(Vector3 position)
+    {
+        GameObject stopLight = Instantiate(stopLightSingle, position, Quaternion.identity);
+        stopLight.transform.localScale = new Vector3(0.5f, 0.5f, 0.5f); 
+
+        TrafficLightManager controller = stopLight.GetComponent<TrafficLightManager>();
+        if (controller == null)
+        {
+            controller = stopLight.AddComponent<TrafficLightManager>();
+        }
+
+
+        controller.redLight = stopLight.transform.Find("RedLight")?.gameObject;
+        controller.yellowLight = stopLight.transform.Find("YellowLight")?.gameObject;
+        controller.greenLight = stopLight.transform.Find("GreenLight")?.gameObject;
+
+        controller.SetState("RED");
+        
+        controller.id = trafficLightCounter;
+        trafficLightCounter++; 
+        return controller;
     }
 }
